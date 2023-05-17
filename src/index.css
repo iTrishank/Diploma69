@@ -70,6 +70,11 @@ nav .nav-button {
 }
 
 nav .nav-button:disabled {
+  background-color: rgb(189, 180, 180);
+  color: rgb(160, 38, 75);
+}
+
+nav .nav-button:disabled {
   background-color: rgb(181, 180, 180);
   color: rgb(189, 42, 90);
 }
@@ -98,4 +103,36 @@ nav .logo-container .logo {
 
 .home {
   margin-top: 30vh;
+}
+
+/*-------- Auth Modal --------*/
+
+.auth-modal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 360px;
+  height: 600px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  padding: 40px;
+}
+
+.auth-modal .close-icon {
+  float: right;
+}
+
+.auth-modal form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-modal input[type="password"],
+.auth-modal input[type="email"] {
+  padding: 8px;
+  margin: 8px;
+  font-size: 17px;
 }
