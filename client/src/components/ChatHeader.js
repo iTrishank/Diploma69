@@ -8,7 +8,7 @@ const ChatHeader = () => {
         <h3>UserName</h3>
       </div>
 
-      <i className="log-out-icon">«</i>
+      <i className="log-out-icon">«</i>
     </div>
   );
 };
