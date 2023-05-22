@@ -5,7 +5,7 @@ import ChatContainer from "../components/ChatContainer";
 const Dashboard = () => {
   const characters = [
     {
-      name: "Richard Hendricks",
+      name: "Ricchi Hendricks",
       url: "https://images.unsplash.com/photo-1633722715463-d30f4f325e24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
     },
     {
