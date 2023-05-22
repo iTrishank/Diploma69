@@ -50,6 +50,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+//* Login Backend
 app.post("/login", async (req, res) => {
   const client = new MongoClient(uri);
   const { email, password } = req.body;
@@ -71,6 +72,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
+//* Users back-end
 app.get("/users", async (req, res) => {
   const client = new MongoClient(uri);
   try {
@@ -84,6 +86,7 @@ app.get("/users", async (req, res) => {
   }
 });
 
+//* User back-end
 app.put("/user", async (req, res) => {
   const client = new MongoClient(uri);
   const formData = req.body.formData;
@@ -93,7 +96,7 @@ app.put("/user", async (req, res) => {
     const database = client.db("app-data");
     const users = database.collection("users");
 
-    const query = { user_id: formData.user_id }; //! here using cookie for another page
+    const query = { user_id: formData.user_id }; //! here using cookie for another page maybe
     const updateDocument = {
       $set: {
         first_name: formData.first_name,
