@@ -3,7 +3,6 @@ import Nav from "../components/Nav";
 
 const OnBoarding = () => {
   const [formData, setFormData] = useState({
-    user: "",
     first_name: "",
     dob_day: "",
     dob_month: "",
@@ -11,7 +10,6 @@ const OnBoarding = () => {
     show_gender: false,
     gender_identity: "",
     gender_interest: "",
-    email: "",
     url: "",
     about: "",
     matches: [],
@@ -172,7 +170,9 @@ const OnBoarding = () => {
               required={true}
             />
             <div className="photo-container">
-              <img src={formData.url} alt="Profile pic Preview" />
+              {formData.url && (
+                <img src={formData.url} alt="Profile pic Preview" />
+              )}
             </div>
           </section>
         </form>
