@@ -1,13 +1,21 @@
-import { React, useState } from "react";
-import Nav from "../components/Nav";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import Nav from "../components/Nav";
 
 const OnBoarding = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+  //* Get cookie value by name
+  const getCookie = (name) => {
+    const cookies = document.cookie.split("; ").reduce((acc, cookie) => {
+      const [cookieName, cookieValue] = cookie.split("=");
+      acc[cookieName] = cookieValue;
+      return acc;
+    }, {});
+
+    return cookies[name] || "";
+  };
   const [formData, setFormData] = useState({
-    user_id: cookies.UserId,
+    user_id: getCookie("UserId"),
     first_name: "",
     dob_day: "",
     dob_month: "",
@@ -20,7 +28,14 @@ const OnBoarding = () => {
     matches: [],
   });
 
-  let navigate = useNavigate;
+  let navigate = useNavigate();
+
+  console.log(formData);
+
+  const setCookie = (name, value) => {
+    document.cookie = `${name}=${value}; path=/`;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -45,7 +60,6 @@ const OnBoarding = () => {
     }));
   };
 
-  console.log(formData);
   return (
     <>
       <Nav minimal={true} setShowModal={() => {}} showModal={false} />

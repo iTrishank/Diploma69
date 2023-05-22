@@ -1,15 +1,12 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useCookie } from "react-cookie";
 
 const AuthModal = ({ setShowModal, isSignUp }) => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
   const [error, setError] = useState(null);
-  // const [cookies, setCookie, removeCookie] = useCookie("user");
 
   let navigate = useNavigate();
 
@@ -18,6 +15,10 @@ const AuthModal = ({ setShowModal, isSignUp }) => {
   //* to close the Modal from "Login/Create Account"
   const handleClick = () => {
     setShowModal(false);
+  };
+
+  const setCookie = (name, value) => {
+    document.cookie = `${name}=${value}; path=/`;
   };
 
   const handleSubmit = async (e) => {
@@ -35,10 +36,11 @@ const AuthModal = ({ setShowModal, isSignUp }) => {
         }
       );
 
-      //setCookie("AuthToken", response.data.token);
-      // setCookie("UserId", response.data.userId);
+      setCookie("AuthToken", response.data.token);
+      setCookie("UserId", response.data.userId);
 
       const success = response.status === 201;
+
       if (success && isSignUp) navigate("/onboarding");
       if (success && !isSignUp) navigate("/dashboard");
     } catch (error) {
