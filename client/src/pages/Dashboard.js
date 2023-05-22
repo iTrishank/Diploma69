@@ -15,8 +15,9 @@ const Dashboard = () => {
   };
 
   const userId = getCookie("UserId");
-
+  const [lastDirection, setLastDirection] = useState();
   const [user, setUser] = useState(null);
+  const [genderedUsers, setGenderedUsers] = useState(null);
 
   const getUser = async () => {
     try {
@@ -29,38 +30,41 @@ const Dashboard = () => {
     }
   };
 
+  const getGenderedUsers = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/gendered-users", {
+        params: { gender: user?.gender_interest },
+      });
+      setGenderedUsers(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getUser();
-  }, []);
+    getGenderedUsers();
+  }, [user, genderedUsers]);
 
-  console.log("user", user);
+  const updatedMatches = async (matchedUserId) => {
+    try {
+      await axios.put("http://localhost:8000/addmatch", {
+        userId,
+        matchedUserId,
+      });
+      getUser();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const characters = [
-    {
-      name: "Ricchi Hendricks",
-      url: "https://images.unsplash.com/photo-1633722715463-d30f4f325e24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-    },
-    {
-      name: "Erlich Bachman",
-      url: "https://images.unsplash.com/photo-1602241628512-459cdd3234fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-    },
-    {
-      name: "Monica Hall",
-      url: "https://images.unsplash.com/photo-1633722715463-d30f4f325e24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-    },
-    {
-      name: "Jared Dunn",
-      url: "https://images.unsplash.com/photo-1602241628512-459cdd3234fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-    },
-    {
-      name: "Dinesh Chugtai",
-      url: "https://images.unsplash.com/photo-1602241628512-459cdd3234fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-    },
-  ];
-  const [lastDirection, setLastDirection] = useState();
+  console.log(user);
 
-  const swiped = (direction, nameToDelete) => {
-    console.log("removing: " + nameToDelete);
+  const swiped = (direction, swipedUserId) => {
+    //! Swiping algorithms
+    if (direction === "right") {
+      updatedMatches(swipedUserId);
+    }
     setLastDirection(direction);
   };
 
@@ -74,18 +78,20 @@ const Dashboard = () => {
           <ChatContainer user={user} />
           <div className="swipe-container">
             <div className="card-container">
-              {characters.map((character) => (
+              {genderedUsers?.map((genderedUsers) => (
                 <TinderCard
                   className="swipe"
-                  key={character.name}
-                  onSwipe={(dir) => swiped(dir, character.name)}
-                  onCardLeftScreen={() => outOfFrame(character.name)}
+                  key={genderedUsers.first_name}
+                  onSwipe={(dir) => swiped(dir, genderedUsers.user_id)}
+                  onCardLeftScreen={() => outOfFrame(genderedUsers.first_name)}
                 >
                   <div
-                    style={{ backgroundImage: "url(" + character.url + ")" }}
+                    style={{
+                      backgroundImage: "url(" + genderedUsers.url + ")",
+                    }}
                     className="card"
                   >
-                    <h3>{character.name}</h3>
+                    <h3>{genderedUsers.first_name}</h3>
                   </div>
                 </TinderCard>
               ))}
