@@ -14,7 +14,7 @@ const Home = () => {
 
     return cookies[name] || "";
   };
-  const authToken = getCookie("Authtoken");
+  const authToken = getCookie("AuthToken");
 
   const [showModal, setShowModal] = useState(false);
 
