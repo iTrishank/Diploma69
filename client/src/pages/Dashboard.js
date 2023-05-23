@@ -43,10 +43,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     getUser();
-    getGenderedUsers();
-  }, [user, genderedUsers]);
+  }, []);
 
-  const updatedMatches = async (matchedUserId) => {
+  useEffect(() => {
+    if (user) {
+      getGenderedUsers();
+    }
+  }, [user]);
+
+  const updateMatches = async (matchedUserId) => {
     try {
       await axios.put("http://localhost:8000/addmatch", {
         userId,
@@ -63,7 +68,7 @@ const Dashboard = () => {
   const swiped = (direction, swipedUserId) => {
     //! Swiping algorithms
     if (direction === "right") {
-      updatedMatches(swipedUserId);
+      updateMatches(swipedUserId);
     }
     setLastDirection(direction);
   };
@@ -71,6 +76,14 @@ const Dashboard = () => {
   const outOfFrame = (name) => {
     console.log(name + " left the screen!");
   };
+
+  const matchedUserIds = user?.matches
+    .map(({ user_id }) => user_id)
+    .concat(userId);
+
+  const filteredGenderedUsers = genderedUsers?.filter(
+    (genderedUser) => !matchedUserIds.includes(genderedUser.user_id)
+  );
   return (
     <>
       {user && (
@@ -78,16 +91,16 @@ const Dashboard = () => {
           <ChatContainer user={user} />
           <div className="swipe-container">
             <div className="card-container">
-              {genderedUsers?.map((genderedUsers) => (
+              {filteredGenderedUsers?.map((genderedUser) => (
                 <TinderCard
                   className="swipe"
-                  key={genderedUsers.first_name}
-                  onSwipe={(dir) => swiped(dir, genderedUsers.user_id)}
-                  onCardLeftScreen={() => outOfFrame(genderedUsers.first_name)}
+                  key={genderedUser.user_id}
+                  onSwipe={(dir) => swiped(dir, genderedUser.user_id)}
+                  onCardLeftScreen={() => outOfFrame(genderedUser.first_name)}
                 >
                   <div
                     style={{
-                      backgroundImage: "url(" + genderedUsers.url + ")",
+                      backgroundImage: "url(" + genderedUser.url + ")",
                     }}
                     className="card"
                   >

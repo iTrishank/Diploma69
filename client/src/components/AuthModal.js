@@ -10,8 +10,6 @@ const AuthModal = ({ setShowModal, isSignUp }) => {
 
   let navigate = useNavigate();
 
-  console.log(email, password, confirmPassword);
-
   //* to close the Modal from "Login/Create Account"
   const handleClick = () => {
     setShowModal(false);

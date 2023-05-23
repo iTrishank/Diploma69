@@ -5,7 +5,16 @@ import AuthModal from "../components/AuthModal";
 
 const Home = () => {
   //* Authorization taken is added here
-  const authToken = false;
+  const getCookie = (name) => {
+    const cookies = document.cookie.split("; ").reduce((acc, cookie) => {
+      const [cookieName, cookieValue] = cookie.split("=");
+      acc[cookieName] = cookieValue;
+      return acc;
+    }, {});
+
+    return cookies[name] || "";
+  };
+  const authToken = getCookie("Authtoken");
 
   const [showModal, setShowModal] = useState(false);
 
@@ -14,7 +23,13 @@ const Home = () => {
 
   //* Primary button functionality
   const handleClick = () => {
-    console.log("clicked!");
+    if (authToken) {
+      document.cookie =
+        "UserId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie =
+        "AuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      window.location.reload();
+    }
     setShowModal(true);
     setIsSignUp(true);
   };
@@ -22,6 +37,7 @@ const Home = () => {
   return (
     <div className="overlay">
       <Nav
+        authToken={authToken}
         minimal={false}
         setShowModal={setShowModal}
         showModal={showModal}
