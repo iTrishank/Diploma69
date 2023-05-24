@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
+require("dotenv").config();
 
 const uri =
   "mongodb+srv://trishank:password123password@cluster0.jazxatw.mongodb.net/?retryWrites=true&w=majority";
@@ -12,15 +13,17 @@ const uri =
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Default
 app.get("/", (req, res) => {
   res.json("Hello to my app");
 });
 
-//* Sign Up
-
+// Sign up to the Database
 app.post("/signup", async (req, res) => {
   const client = new MongoClient(uri);
   const { email, password } = req.body;
+
   const generatedUserId = uuidv4();
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -28,20 +31,26 @@ app.post("/signup", async (req, res) => {
     await client.connect();
     const database = client.db("app-data");
     const users = database.collection("users");
+
     const existingUser = await users.findOne({ email });
 
     if (existingUser) {
-      return res.status(409).send("User already exists. Please Login");
+      return res.status(409).send("User already exists. Please login");
     }
+
     const sanitizedEmail = email.toLowerCase();
+
     const data = {
       user_id: generatedUserId,
       email: sanitizedEmail,
-      hashedPassword: hashedPassword,
+      hashed_password: hashedPassword,
     };
-    const insertUser = await users.insertOne(data);
-    const token = jwt.sign(insertUser, sanitizedEmail, { expiresIn: 60 * 24 });
 
+    const insertedUser = await users.insertOne(data);
+
+    const token = jwt.sign(insertedUser, sanitizedEmail, {
+      expiresIn: 60 * 24,
+    });
     res.status(201).json({ token, userId: generatedUserId });
   } catch (err) {
     console.log(err);
@@ -50,28 +59,39 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-//* Login Backend
+// Log in to the Database
 app.post("/login", async (req, res) => {
   const client = new MongoClient(uri);
   const { email, password } = req.body;
+
   try {
     await client.connect();
     const database = client.db("app-data");
     const users = database.collection("users");
+
     const user = await users.findOne({ email });
-    const correctPassword = await bcrypt.compare(password, user.hashedPassword);
+
+    const correctPassword = await bcrypt.compare(
+      password,
+      user.hashed_password
+    );
+
     if (user && correctPassword) {
       const token = jwt.sign(user, email, {
         expiresIn: 60 * 24,
       });
       res.status(201).json({ token, userId: user.user_id });
     }
-    res.status(400).send("Invalid Credentials");
+
+    //res.status(400).json("Invalid Credentials");
   } catch (err) {
     console.log(err);
+  } finally {
+    await client.close();
   }
 });
 
+// Get individual user
 app.get("/user", async (req, res) => {
   const client = new MongoClient(uri);
   const userId = req.query.userId;
@@ -80,6 +100,7 @@ app.get("/user", async (req, res) => {
     await client.connect();
     const database = client.db("app-data");
     const users = database.collection("users");
+
     const query = { user_id: userId };
     const user = await users.findOne(query);
     res.send(user);
@@ -88,6 +109,28 @@ app.get("/user", async (req, res) => {
   }
 });
 
+// Update User with a match
+app.put("/addmatch", async (req, res) => {
+  const client = new MongoClient(uri);
+  const { userId, matchedUserId } = req.body;
+
+  try {
+    await client.connect();
+    const database = client.db("app-data");
+    const users = database.collection("users");
+
+    const query = { user_id: userId };
+    const updateDocument = {
+      $push: { matches: { user_id: matchedUserId } },
+    };
+    const user = await users.updateOne(query, updateDocument);
+    res.send(user);
+  } finally {
+    await client.close();
+  }
+});
+
+// Get all Users by userIds in the Database
 app.get("/users", async (req, res) => {
   const client = new MongoClient(uri);
   const userIds = JSON.parse(req.query.userIds);
@@ -108,30 +151,31 @@ app.get("/users", async (req, res) => {
     ];
 
     const foundUsers = await users.aggregate(pipeline).toArray();
+
     res.json(foundUsers);
   } finally {
     await client.close();
   }
 });
 
-//* Users back-end
+// Get all the Gendered Users in the Database
 app.get("/gendered-users", async (req, res) => {
   const client = new MongoClient(uri);
   const gender = req.query.gender;
+
   try {
     await client.connect();
     const database = client.db("app-data");
     const users = database.collection("users");
     const query = { gender_identity: { $eq: gender } };
     const foundUsers = await users.find(query).toArray();
-
-    res.send(foundUsers);
+    res.json(foundUsers);
   } finally {
     await client.close();
   }
 });
 
-//* User back-end
+// Update a User in the Database
 app.put("/user", async (req, res) => {
   const client = new MongoClient(uri);
   const formData = req.body.formData;
@@ -141,7 +185,8 @@ app.put("/user", async (req, res) => {
     const database = client.db("app-data");
     const users = database.collection("users");
 
-    const query = { user_id: formData.user_id }; //! here using cookie for another page maybe
+    const query = { user_id: formData.user_id };
+
     const updateDocument = {
       $set: {
         first_name: formData.first_name,
@@ -156,36 +201,20 @@ app.put("/user", async (req, res) => {
         matches: formData.matches,
       },
     };
+
     const insertedUser = await users.updateOne(query, updateDocument);
-    res.send(insertedUser);
-  } finally {
-    await client.close;
-  }
-});
 
-//! match algo
-app.put("/addmatch", async (req, res) => {
-  const client = new MongoClient(uri);
-  const { userId, matchedUserId } = req.body;
-  try {
-    await client.connect();
-    const database = client.db("app-data");
-    const users = database.collection("users");
-
-    const query = { user_id: userId };
-    const updateDocument = {
-      $push: { matches: { user_id: matchedUserId } },
-    };
-    const user = await users.updateOne(query, updateDocument);
-    res.send(user);
+    res.json(insertedUser);
   } finally {
     await client.close();
   }
 });
 
+// Get Messages by from_userId and to_userId
 app.get("/messages", async (req, res) => {
-  const client = new MongoClient(uri);
   const { userId, correspondingUserId } = req.query;
+  const client = new MongoClient(uri);
+
   try {
     await client.connect();
     const database = client.db("app-data");
@@ -202,13 +231,16 @@ app.get("/messages", async (req, res) => {
   }
 });
 
+// Add a Message to our Database
 app.post("/message", async (req, res) => {
   const client = new MongoClient(uri);
   const message = req.body.message;
+
   try {
     await client.connect();
     const database = client.db("app-data");
     const messages = database.collection("messages");
+
     const insertedMessage = await messages.insertOne(message);
     res.send(insertedMessage);
   } finally {
@@ -216,4 +248,4 @@ app.post("/message", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log("Server running on Port" + PORT));
+app.listen(PORT, () => console.log("server running on PORT " + PORT));
