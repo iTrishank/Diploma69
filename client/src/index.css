@@ -295,6 +295,10 @@ nav .logo-container .logo {
   width: 100%;
 }
 
+.chat-header-img {
+  width: 50%;
+}
+
 /*-------- Chat Display --------*/
 
 .chat-display,

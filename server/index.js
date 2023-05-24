@@ -81,9 +81,9 @@ app.post("/login", async (req, res) => {
         expiresIn: 60 * 24,
       });
       res.status(201).json({ token, userId: user.user_id });
+    } else {
+      res.status(400).json("Invalid Credentials");
     }
-
-    //res.status(400).json("Invalid Credentials");
   } catch (err) {
     console.log(err);
   } finally {
@@ -162,7 +162,7 @@ app.get("/users", async (req, res) => {
 app.get("/gendered-users", async (req, res) => {
   const client = new MongoClient(uri);
   const gender = req.query.gender;
-
+  console.log("gender", gender); //! ATTENTION
   try {
     await client.connect();
     const database = client.db("app-data");
@@ -204,7 +204,7 @@ app.put("/user", async (req, res) => {
 
     const insertedUser = await users.updateOne(query, updateDocument);
 
-    res.json(insertedUser);
+    res.send(insertedUser);
   } finally {
     await client.close();
   }

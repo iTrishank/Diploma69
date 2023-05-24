@@ -3,7 +3,7 @@ import Chat from "./Chat";
 import ChatInput from "./ChatInput";
 import axios from "axios";
 
-const ChatDisplay = (user, clickedUser) => {
+const ChatDisplay = ({ user, clickedUser }) => {
   const userId = user?.user_id;
   const clickedUserId = clickedUser?.user_id;
   const [usersMessages, setUsersMessages] = useState(null);
