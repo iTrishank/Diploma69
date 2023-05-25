@@ -142,17 +142,17 @@ app.get("/users", async (req, res) => {
 
     const pipeline = [
       {
-        $match: {
-          user_id: {
-            $in: userIds,
+        '$match': {
+          'user_id': {
+            '$in': userIds,
           },
         },
       },
     ];
-
+    console.log(pipeline); // ! ATTENTION HELP HERE 
     const foundUsers = await users.aggregate(pipeline).toArray();
-
-    res.json(foundUsers);
+    console.log(foundUsers);
+    res.send(foundUsers);
   } finally {
     await client.close();
   }
@@ -167,7 +167,7 @@ app.get("/gendered-users", async (req, res) => {
     await client.connect();
     const database = client.db("app-data");
     const users = database.collection("users");
-    const query = { gender_identity: { $eq: gender } };
+    const query = { gender_identity: gender  }; //!!! Changes were made here to show in chat
     const foundUsers = await users.find(query).toArray();
     res.json(foundUsers);
   } finally {
