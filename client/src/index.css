@@ -7,10 +7,6 @@ body {
   text-align: center;
 }
 
-h2 {
-  font-style: italic;
-}
-
 * {
   font-family: "Readex Pro", sans-serif;
 }
@@ -80,7 +76,7 @@ nav .logo-container {
 }
 
 nav .logo-container .logo {
-  width: 100%;
+  width: 150%;
 }
 
 /*-------- Home page --------*/
@@ -88,12 +84,11 @@ nav .logo-container .logo {
   width: 100vw;
   height: 100vh;
   position: fixed;
-  background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.65) 0%,
-      rgba(0, 0, 0, 0) 100%
-    ),
-    url("images/6e9794bcedeecf5a8f8f41338a2a7345.webp");
+  background-image: url("images/moodboard.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
 }
 
 .home {

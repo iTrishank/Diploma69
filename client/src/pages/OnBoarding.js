@@ -118,7 +118,7 @@ const OnBoarding = () => {
                 onChange={handleChange}
                 checked={formData.gender_identity === "man"}
               />
-              <label htmlFor="man-gender-identity">Man</label>
+              <label htmlFor="man-gender-identity">Golden Retriever</label>
               <input
                 id="woman-gender-identity"
                 type="radio"
@@ -127,7 +127,7 @@ const OnBoarding = () => {
                 onChange={handleChange}
                 checked={formData.gender_identity === "woman"}
               />
-              <label htmlFor="woman-gender-identity">Woman</label>
+              <label htmlFor="woman-gender-identity">Dobermann</label>
               <input
                 id="more-gender-identity"
                 type="radio"
@@ -136,7 +136,7 @@ const OnBoarding = () => {
                 onChange={handleChange}
                 checked={formData.gender_identity === "more"}
               />
-              <label htmlFor="more-gender-identity">More</label>
+              <label htmlFor="more-gender-identity">Spitz</label>
             </div>
 
             <label htmlFor="show-gender">Show gender on my profile</label>
@@ -157,7 +157,7 @@ const OnBoarding = () => {
                 onChange={handleChange}
                 checked={formData.gender_interest === "man"}
               />
-              <label htmlFor="man-gender-interest">Man</label>
+              <label htmlFor="man-gender-interest">Dobermann</label>
               <input
                 id="woman-gender-interest"
                 type="radio"
@@ -166,7 +166,7 @@ const OnBoarding = () => {
                 onChange={handleChange}
                 checked={formData.gender_interest === "woman"}
               />
-              <label htmlFor="woman-gender-interest">Woman</label>
+              <label htmlFor="woman-gender-interest">Golden Retriever</label>
               <input
                 id="everyone-gender-interest"
                 type="radio"
@@ -175,7 +175,7 @@ const OnBoarding = () => {
                 onChange={handleChange}
                 checked={formData.gender_interest === "everyone"}
               />
-              <label htmlFor="everyone-gender-interest">Everyone</label>
+              <label htmlFor="everyone-gender-interest">Spitz</label>
             </div>
             <label htmlFor="about">About Me</label>
             <input
