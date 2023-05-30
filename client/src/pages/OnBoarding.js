@@ -136,7 +136,7 @@ const OnBoarding = () => {
                 onChange={handleChange}
                 checked={formData.gender_identity === "more"}
               />
-              <label htmlFor="more-gender-identity">Spitz</label>
+              <label htmlFor="more-gender-identity">Both</label>
             </div>
 
             <label htmlFor="show-gender">Show gender on my profile</label>
@@ -157,7 +157,7 @@ const OnBoarding = () => {
                 onChange={handleChange}
                 checked={formData.gender_interest === "man"}
               />
-              <label htmlFor="man-gender-interest">Dobermann</label>
+              <label htmlFor="man-gender-interest">Golden Retriever</label>
               <input
                 id="woman-gender-interest"
                 type="radio"
@@ -166,7 +166,7 @@ const OnBoarding = () => {
                 onChange={handleChange}
                 checked={formData.gender_interest === "woman"}
               />
-              <label htmlFor="woman-gender-interest">Golden Retriever</label>
+              <label htmlFor="woman-gender-interest">Dobermann</label>
               <input
                 id="everyone-gender-interest"
                 type="radio"
@@ -175,7 +175,7 @@ const OnBoarding = () => {
                 onChange={handleChange}
                 checked={formData.gender_interest === "everyone"}
               />
-              <label htmlFor="everyone-gender-interest">Spitz</label>
+              <label htmlFor="everyone-gender-interest">Both</label>
             </div>
             <label htmlFor="about">About Me</label>
             <input
