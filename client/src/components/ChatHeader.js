@@ -1,11 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ChatHeader = ({ user }) => {
+  const navigate = useNavigate();
+
   const logout = () => {
     document.cookie = "UserId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie =
       "AuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.reload();
+    //window.location.reload();
+    navigate("/");
   };
 
   return (

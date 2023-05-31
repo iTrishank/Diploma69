@@ -40,7 +40,7 @@ app.post("/signup", async (req, res) => {
 
     const sanitizedEmail = email.toLowerCase();
 
-    const data = {
+    const data = {     //!!!!!!!!!!!!!!!!!
       user_id: generatedUserId,
       email: sanitizedEmail,
       hashed_password: hashedPassword,
