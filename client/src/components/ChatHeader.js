@@ -14,7 +14,7 @@ const ChatHeader = ({ user }) => {
         <img
           id="chat-header-img"
           style={{
-            width: "69px", // Adjust the width as needed
+            width: "69px", // Adjust the width as need
             height: "69px", // Adjust the height as needed
             borderRadius: "50%",
             overflow: "hidden",
