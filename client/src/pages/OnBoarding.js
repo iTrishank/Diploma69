@@ -111,23 +111,25 @@ const OnBoarding = () => {
             <label>Gender</label>
             <div className="multiple-input-container">
               <input
-                id="man-gender-identity"
+                id="Golden-gender-identity"
                 type="radio"
                 name="gender_identity"
-                value="man"
+                value="Golden"
                 onChange={handleChange}
-                checked={formData.gender_identity === "man"}
+                checked={formData.gender_identity === "Golden"}
               />
-              <label htmlFor="man-gender-identity">Golden Retriever</label>
+              <label htmlFor="Golden-gender-identity">Golden Retriever</label>
+
               <input
-                id="woman-gender-identity"
+                id="Doberman-gender-identity"
                 type="radio"
                 name="gender_identity"
-                value="woman"
+                value="Doberman"
                 onChange={handleChange}
-                checked={formData.gender_identity === "woman"}
+                checked={formData.gender_identity === "Doberman"}
               />
-              <label htmlFor="woman-gender-identity">Doberman</label>
+              <label htmlFor="Doberman-gender-identity">Doberman</label>
+
               <input
                 id="more-gender-identity"
                 type="radio"
@@ -150,23 +152,24 @@ const OnBoarding = () => {
             <label>Show Me</label>
             <div className="multiple-input-container">
               <input
-                id="man-gender-interest"
+                id="Golden-gender-interest"
                 type="radio"
                 name="gender_interest"
-                value="man"
+                value="Golden"
                 onChange={handleChange}
-                checked={formData.gender_interest === "man"}
+                checked={formData.gender_interest === "Golden"}
               />
-              <label htmlFor="man-gender-interest">Golden Retriever</label>
+              <label htmlFor="Golden-gender-interest">Golden Retriever</label>
               <input
-                id="woman-gender-interest"
+                id="Doberman-gender-interest"
                 type="radio"
                 name="gender_interest"
-                value="woman"
+                value="Doberman"
                 onChange={handleChange}
-                checked={formData.gender_interest === "woman"}
+                checked={formData.gender_interest === "Doberman"}
               />
-              <label htmlFor="woman-gender-interest">Doberman</label>
+              <label htmlFor="Doberman-gender-interest">Doberman</label>
+
               <input
                 id="everyone-gender-interest"
                 type="radio"
