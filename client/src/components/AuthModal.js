@@ -1,40 +1,97 @@
-import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import React, { useState } from "react";
 import axios from "axios";
-import AuthModal from "./AuthModal";
+import { useNavigate } from "react-router-dom";
 
-jest.mock("axios");
+const AuthModal = ({ setShowModal, isSignUp }) => {
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState(null);
+  const [error, setError] = useState(null);
 
-describe("AuthModal", () => {
-  test("handleSubmit - Successful login", async () => {
-    axios.post.mockResolvedValueOnce({
-      status: 200,
-      data: {
-        token: "mockAuthToken",
-        userId: "mockUserId",
-      },
-    });
+  let navigate = useNavigate();
 
-    const { getByLabelText, getByText } = render(
-      <AuthModal setShowModal={() => {}} isSignUp={false} />
-    );
+  //* to close the Modal from "Login/Create Account"
+  const handleClick = () => {
+    setShowModal(false);
+  };
 
-    fireEvent.change(getByLabelText("email"), {
-      target: { value: "test@example.com" },
-    });
-    fireEvent.change(getByLabelText("password"), {
-      target: { value: "password123" },
-    });
+  const setCookie = (name, value) => {
+    document.cookie = `${name}=${value}; path=/`;
+  };
 
-    fireEvent.submit(getByText("Submit"));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (isSignUp && password !== confirmPassword) {
+        setError("Password needs to match");
+        return;
+      }
+      const response = await axios.post(
+        `http://localhost:8000/${isSignUp ? "signup" : "login"}`,
+        {
+          email,
+          password,
+        }
+      );
 
-    await waitFor(() => expect(axios.post).toHaveBeenCalledTimes(1));
+      setCookie("AuthToken", response.data.token);
+      setCookie("UserId", response.data.userId);
 
-    // Assert the desired behavior based on the mock response
-    // ...
+      const success = response.status === 201;
 
-    // You can also assert that the navigation occurred
-    // For example, if the login was successful, it should navigate to "/dashboard"
-    // expect(navigate).toHaveBeenCalledWith("/dashboard");
-  });
-});
+      if (success && isSignUp) navigate("/onboarding");
+      if (success && !isSignUp) navigate("/dashboard");
+
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="auth-modal">
+      <div className="close-icon" onClick={handleClick}>
+        ∞
+      </div>
+      <h2>{isSignUp ? "CREATE ACCOUNT" : "LOG IN"}</h2>
+      <p>
+        By clicking Log In, you agree to our terms. Learn how we process your
+        data in our Privacy Policy.
+      </p>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="email"
+          required={true}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="password"
+          required={true}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {isSignUp && (
+          <input
+            type="password"
+            id="password-check"
+            name="password-check"
+            placeholder="confirm password"
+            required={true}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        )}
+        <input className="secondary-button" type="submit" />
+        <p>{error}</p>
+      </form>
+      <hr />
+      <h2>GET THE APP</h2>
+    </div>
+  );
+};
+
+export default AuthModal;
