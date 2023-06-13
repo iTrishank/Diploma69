@@ -131,14 +131,14 @@ const OnBoarding = () => {
               <label htmlFor="Doberman-gender-identity">Doberman</label>
 
               <input
-                id="more-gender-identity"
+                id="german-gender-identity"
                 type="radio"
                 name="gender_identity"
-                value="more"
+                value="german"
                 onChange={handleChange}
-                checked={formData.gender_identity === "more"}
+                checked={formData.gender_identity === "german"}
               />
-              <label htmlFor="more-gender-identity">Both</label>
+              <label htmlFor="more-gender-identity">Germany Shepard</label>
             </div>
 
             <label htmlFor="show-gender">Show gender on my profile</label>
@@ -171,14 +171,14 @@ const OnBoarding = () => {
               <label htmlFor="Doberman-gender-interest">Doberman</label>
 
               <input
-                id="everyone-gender-interest"
+                id="german-gender-interest"
                 type="radio"
                 name="gender_interest"
-                value="everyone"
+                value="german"
                 onChange={handleChange}
-                checked={formData.gender_interest === "everyone"}
+                checked={formData.gender_interest === "german"}
               />
-              <label htmlFor="everyone-gender-interest">Both</label>
+              <label htmlFor="everyone-gender-interest">Germany Shepard</label>
             </div>
             <label htmlFor="about">About Me</label>
             <input
