@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import close from "../images/icons8/icons8-close-30.png";
 
 const AuthModal = ({ setShowModal, isSignUp }) => {
   const [email, setEmail] = useState(null);
@@ -51,7 +52,7 @@ const AuthModal = ({ setShowModal, isSignUp }) => {
   return (
     <div className="auth-modal">
       <div className="close-icon" onClick={handleClick}>
-        ∞
+        <img src={close} style={{ width: "20px", height: "20px" }}></img>
       </div>
       <h2>{isSignUp ? "CREATE ACCOUNT" : "LOG IN"}</h2>
       <p>

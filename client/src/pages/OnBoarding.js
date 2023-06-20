@@ -108,7 +108,7 @@ const OnBoarding = () => {
               />
             </div>
 
-            <label>Gender</label>
+            <label>Breed</label>
             <div className="multiple-input-container">
               <input
                 id="Golden-gender-identity"
